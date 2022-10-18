@@ -17,7 +17,7 @@ public class LivroTest {
         Livro livro = LivroBuilder
                 .umLivro()
                 .construi();
-        assertFalse(livro.reservar());
+        assertFalse(livro.isReservado());
     }
 
     @Test

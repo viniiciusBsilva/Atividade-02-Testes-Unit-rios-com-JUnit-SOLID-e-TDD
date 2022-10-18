@@ -41,8 +41,7 @@ public class Reserva {
     }
 
     public void addLivros(Livro... livros) {
-        if (livros.length < 1) throw new IllegalArgumentException("A reserva precisa de pelo menos um livro");
-        else if (livros.length > 2) throw new IllegalArgumentException("A reserva precisa de no máximo 2 livros");
+        if (livros.length < 1 || livros.length > 1) throw new IllegalArgumentException("A reserva aceita apenas um livro");
         else this.livros.addAll(Arrays.asList(livros));
     }
 }

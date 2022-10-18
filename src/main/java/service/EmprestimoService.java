@@ -12,7 +12,7 @@ public class EmprestimoService {
     public Emprestimo emprestarLivro(Usuario usuario, Livro... livros){
         Arrays.stream(livros).
                 forEach(livro -> {
-                    if (!livro.emprestar())
+                    if (livro.isEmprestado())
                         throw new IllegalArgumentException("Livro não disponível: " + livro.getTitulo());
                 });
 
@@ -20,36 +20,58 @@ public class EmprestimoService {
         emprestimo.addLivros(livros);
         emprestimo.setUsuario(usuario);
         emprestimo.setDataEmprestimo(LocalDate.now() );
+        for (Livro l:livros) {
+            l.emprestar();
+        }
 
         emprestimo.setDataPrevista(LocalDate.now().plusDays(7) );
 
         return emprestimo;
     }
 
-    private double calculaValorLocacao(Livro... livros) {
-        double valorTotal = 0, valorLivro = 5;
+    private double calculaValorLocacao(int dias, Livro... livros) {
 
-        for(int i = 1; i <= livros.length; i++){
-            valorTotal = valorLivro;
-            if(valorTotal <= (valorLivro * 0.6)){
-                valorTotal += 0.4;
-            }
+        double valorLivro = 5.00;
+        for (Livro l: livros) {
+            valorLivro+=5.00;
         }
-        return valorTotal;
+        if (dias == 0){
+            return valorLivro;
+        }else {
+            double acrescimo = dias * 0.40;
+            if (acrescimo>(0.6*valorLivro)){
+               acrescimo = 0.6*valorLivro;
+            }
+            return acrescimo+valorLivro;
+        }
     }
 
-    /*
-    public Emprestimo devolucaoLivro(Usuario usuario,Livro... livros){
+
+    public double devolucaoLivro(Usuario usuario,Livro... livros){
         Emprestimo emprestimo = new Emprestimo();
+        emprestimo.setUsuario(usuario);
+        emprestimo.addLivros(livros);
 
-        Arrays.stream(livros).
-                forEach(livro -> {
-                if(emprestimo.getUsuario().equals(usuario)&&emprestimo.getLivros().equals(livros)){
-
+        if(emprestarLivro(usuario, livros).equals(emprestimo)){
+            emprestimo.setDataDevolucao(LocalDate.now());
+            if(emprestimo.getDataDevolucao().isAfter(emprestimo.getDataPrevista())){
+                int dias = emprestimo.getDataDevolucao().getDayOfYear() - emprestimo.getDataPrevista().getDayOfYear();
+                for (Livro l: livros) {
+                    l.setHistorico(emprestimo);
                 }
-                });
-        return null;
-    }*/
+                emprestimo.getLivros().remove(livros);
+                return calculaValorLocacao(dias, livros);
+            }else {
+                for (Livro l: livros) {
+                    l.setHistorico(emprestimo);
+                }
+                emprestimo.getLivros().remove(livros);
+                return calculaValorLocacao(0, livros);
+            }
+        }
+        return 0;
+
+    }
 
 
 
