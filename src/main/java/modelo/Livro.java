@@ -11,6 +11,15 @@ public class Livro {
     private boolean reservado;
     private List<Emprestimo> historico;
 
+    public Livro(){}
+
+    public Livro(String autor, String titulo, boolean emprestado, boolean reservado) {
+        this.autor = autor;
+        this.titulo = titulo;
+        this.emprestado = emprestado;
+        this.reservado = reservado;
+    }
+
     public String getAutor() {
         return autor;
     }

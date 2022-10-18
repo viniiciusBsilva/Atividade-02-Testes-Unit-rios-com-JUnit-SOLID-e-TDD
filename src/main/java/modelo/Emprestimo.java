@@ -51,11 +51,8 @@ public class Emprestimo {
     }
 
     public void addLivros(Livro... livros) {
-        try{
-            if (livros.length<1 || livros.length>3)throw new IllegalArgumentException();
-            else this.livros.addAll(Arrays.asList(livros));
-        }catch (IllegalArgumentException e) {
-            System.out.println("a lista precisa de pelo menos um livro e no máximo 3 livros");
-        }
+        if (livros.length < 1) throw new IllegalArgumentException("A lista precisa de pelo menos um livro");
+        else if (livros.length > 3) throw new IllegalArgumentException("A lista precisa de no máximo três livros");
+        else this.livros.addAll(Arrays.asList(livros));
     }
 }
