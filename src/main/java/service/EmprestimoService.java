@@ -12,7 +12,7 @@ public class EmprestimoService {
     public Emprestimo emprestarLivro(Usuario usuario, Livro... livros){
         Arrays.stream(livros).
                 forEach(livro -> {
-                    if (livro.isEmprestado())
+                    if (livro.isEmprestado()||livro.isReservado())
                         throw new IllegalArgumentException("Livro não disponível: " + livro.getTitulo());
                 });
 

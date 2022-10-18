@@ -16,9 +16,9 @@ class EmprestimoServiceTest {
     private Usuario usuario;
 
     @BeforeEach
-    public  void setup(){
+    public void setup() {
         emprestimoService = new EmprestimoService();
-        usuario = new Usuario("Vinicius", "20SI",false);
+        usuario = new Usuario("Vinicius", "20SI", false);
     }
 
     @Test
@@ -28,5 +28,19 @@ class EmprestimoServiceTest {
                 .construi();
         Emprestimo emprestimo = emprestimoService.emprestarLivro(usuario, livro);
         assertEquals(emprestimo.getUsuario(), usuario);
+    }
+
+    @Test
+    void realizaEmprestimoParaLivroReservado() {
+        Livro livro = LivroBuilder
+                .umLivro()
+                .taReservado()
+                .construi();
+
+        IllegalArgumentException exception =
+                assertThrows(IllegalArgumentException.class,
+                        () -> emprestimoService.emprestarLivro(usuario, livro),
+                        "Deveria ter lançado um IllegalArgumentException");
+        assertTrue(exception.getMessage().contains("Livro não disponível:"));
     }
 }

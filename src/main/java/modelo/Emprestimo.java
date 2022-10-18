@@ -1,6 +1,7 @@
 package modelo;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -9,7 +10,7 @@ public class Emprestimo {
     private LocalDate dataEmprestimo;
     private LocalDate dataPrevista;
     private LocalDate dataDevolucao;
-    private List<Livro> livros;
+    private List<Livro> livros = new ArrayList<>();
 
     public Emprestimo(){}
 
@@ -50,8 +51,11 @@ public class Emprestimo {
     }
 
     public void addLivros(Livro... livros) {
-        if (livros.length < 1) throw new IllegalArgumentException("A lista precisa de pelo menos um livro");
-        else if (livros.length > 3) throw new IllegalArgumentException("A lista precisa de no máximo três livros");
-        else this.livros.addAll(Arrays.asList(livros));
+        try{
+            if (livros.length<1 || livros.length>3)throw new IllegalArgumentException();
+            else this.livros.addAll(Arrays.asList(livros));
+        }catch (IllegalArgumentException e) {
+            System.out.println("a lista precisa de pelo menos um livro e no máximo 3 livros");
+        }
     }
 }
